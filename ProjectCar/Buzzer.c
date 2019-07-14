@@ -6,7 +6,7 @@
 
 result_t buzzer_init()
 {
-//  pinMode(buzzerPin, OUTPUT); // PD2 , pin 13
+//  OUTPUT // PD2 , pin 13
   BIT_SET(DDRD,DDD2); // set the PD2 port direction to output
   BIT_CLEAR(PORTD,PORTD2); // set the default value of the PD2 output to 0
   
