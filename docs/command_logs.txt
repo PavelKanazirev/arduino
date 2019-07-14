@@ -1,0 +1,269 @@
+verbose compilation
+===================
+
+
+
+
+
+
+
+
+
+
+C:\Program Files (x86)\Arduino\arduino-builder -dump-prefs -logger=machine -hardware C:\Program Files (x86)\Arduino\hardware -tools C:\Program Files (x86)\Arduino\tools-builder -tools C:\Program Files (x86)\Arduino\hardware\tools\avr -built-in-libraries C:\Program Files (x86)\Arduino\libraries -libraries C:\Users\Vanya\Documents\Arduino\libraries -fqbn=arduino:avr:uno -vid-pid=0X2341_0X0043 -ide-version=10809 -build-path C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276 -warnings=all -build-cache C:\Users\Vanya\AppData\Local\Temp\arduino_cache_101029 -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.avr-gcc.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.avr-gcc-5.4.0-atmel3.6.1-arduino2.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.avrdude.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.avrdude-6.3.0-arduino14.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.arduinoOTA.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.arduinoOTA-1.2.1.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -verbose D:\Pavel\Arduino\ProjectCar\ProjectCar.ino
+C:\Program Files (x86)\Arduino\arduino-builder -compile -logger=machine -hardware C:\Program Files (x86)\Arduino\hardware -tools C:\Program Files (x86)\Arduino\tools-builder -tools C:\Program Files (x86)\Arduino\hardware\tools\avr -built-in-libraries C:\Program Files (x86)\Arduino\libraries -libraries C:\Users\Vanya\Documents\Arduino\libraries -fqbn=arduino:avr:uno -vid-pid=0X2341_0X0043 -ide-version=10809 -build-path C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276 -warnings=all -build-cache C:\Users\Vanya\AppData\Local\Temp\arduino_cache_101029 -prefs=build.warn_data_percentage=75 -prefs=runtime.tools.avr-gcc.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.avr-gcc-5.4.0-atmel3.6.1-arduino2.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.avrdude.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.avrdude-6.3.0-arduino14.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.arduinoOTA.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -prefs=runtime.tools.arduinoOTA-1.2.1.path=C:\Program Files (x86)\Arduino\hardware\tools\avr -verbose D:\Pavel\Arduino\ProjectCar\ProjectCar.ino
+Using board 'uno' from platform in folder: C:\Program Files (x86)\Arduino\hardware\arduino\avr
+Using core 'arduino' from platform in folder: C:\Program Files (x86)\Arduino\hardware\arduino\avr
+Detecting libraries used...
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-g++" -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -flto -w -x c++ -E -CC -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10809 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino" "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\ProjectCar.ino.cpp" -o nul
+Using cached library dependencies for file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\Buzzer.c
+Using cached library dependencies for file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\CarTimer.c
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-g++" -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -flto -w -x c++ -E -CC -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10809 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino" "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\DCMotors.c" -o nul
+Using cached library dependencies for file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\Initialize.c
+Using cached library dependencies for file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\Joystick.c
+Using cached library dependencies for file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\RGBLed.c
+Generating function prototypes...
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-g++" -c -g -Os -w -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -flto -w -x c++ -E -CC -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10809 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino" "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\ProjectCar.ino.cpp" -o "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\preproc\\ctags_target_for_gcc_minus_e.cpp"
+"C:\\Program Files (x86)\\Arduino\\tools-builder\\ctags\\5.8-arduino11/ctags" -u --language-force=c++ -f - --c++-kinds=svpf --fields=KSTtzns --line-directives "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\preproc\\ctags_target_for_gcc_minus_e.cpp"
+Compiling sketch...
+Using previously compiled file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\Buzzer.c.o
+Using previously compiled file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\Initialize.c.o
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-gcc" -c -g -Os -Wall -Wextra -std=gnu11 -ffunction-sections -fdata-sections -MMD -flto -fno-fat-lto-objects -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10809 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino" "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\DCMotors.c" -o "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\DCMotors.c.o"
+Using previously compiled file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\CarTimer.c.o
+Using previously compiled file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\Joystick.c.o
+Using previously compiled file: C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\RGBLed.c.o
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-g++" -c -g -Os -Wall -Wextra -std=gnu++11 -fpermissive -fno-exceptions -ffunction-sections -fdata-sections -fno-threadsafe-statics -Wno-error=narrowing -MMD -flto -mmcu=atmega328p -DF_CPU=16000000L -DARDUINO=10809 -DARDUINO_AVR_UNO -DARDUINO_ARCH_AVR "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\cores\\arduino" "-IC:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\ProjectCar.ino.cpp" -o "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\ProjectCar.ino.cpp.o"
+Compiling libraries...
+Compiling core...
+Using precompiled core: C:\Users\Vanya\AppData\Local\Temp\arduino_cache_101029\core\core_arduino_avr_uno_0c812875ac70eb4a9b385d8fb077f54c.a
+Linking everything together...
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-gcc" -Wall -Wextra -Os -g -flto -fuse-linker-plugin -Wl,--gc-sections -mmcu=atmega328p -o "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/ProjectCar.ino.elf" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\Buzzer.c.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\CarTimer.c.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\DCMotors.c.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\Initialize.c.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\Joystick.c.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\ProjectCar.ino.cpp.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276\\sketch\\RGBLed.c.o" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/..\\arduino_cache_101029\\core\\core_arduino_avr_uno_0c812875ac70eb4a9b385d8fb077f54c.a" "-LC:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276" -lm
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-objcopy" -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma .eeprom=0 "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/ProjectCar.ino.elf" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/ProjectCar.ino.eep"
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-objcopy" -O ihex -R .eeprom "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/ProjectCar.ino.elf" "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/ProjectCar.ino.hex"
+"C:\\Program Files (x86)\\Arduino\\hardware\\tools\\avr/bin/avr-size" -A "C:\\Users\\Vanya\\AppData\\Local\\Temp\\arduino_build_656276/ProjectCar.ino.elf"
+Sketch uses 5486 bytes (17%) of program storage space. Maximum is 32256 bytes.
+Global variables use 396 bytes (19%) of dynamic memory, leaving 1652 bytes for local variables. Maximum is 2048 bytes.
+
+
+Command speed reports
+=====================
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 71 ; Start
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 143 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 216 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 178 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 194 ; up
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 195 ; 80
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 196 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 197 ; 46
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 198 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 199 ; 4
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 76 ; direction forward
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 224
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 216 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 159 ; right
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 160 ; 174
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 161 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 162 ; 3
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 163 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 164 ; 2
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 0
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 109 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 216 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 178 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 159 ; right
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 160 ; 137
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 161 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 162 ; 3
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 163 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 164 ; 2
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 0
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 159 ; right
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 160 ; 255
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 161 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 162 ; 118
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 163 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 164 ; 2
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 0
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 109 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 109 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 125 ; left 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 126 ; 123
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 127 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 128 ; 4
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 129 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 130 ; 1
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 0
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 125 ; left 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 126 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 127 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 128 ; 123
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 129 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 130 ; 1
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 0
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 143 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 178 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 194 ; up
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 195 ; 102
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 196 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 197 ; 24
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 198 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 199 ; 4
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 76 ; direction forward
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 224
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 194 ; up
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 195 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 196 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 197 ; 102
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 198 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 199 ; 4
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 76 ; direction forward
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 224
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 125 ; left 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 126 ; 119
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 127 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 128 ; 3
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 129 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 130 ; 5
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 127
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 125 ; left 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 126 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 127 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 128 ; 119
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 129 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 130 ; 5
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 127
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 143 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 143 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 178 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 194 ; up
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 195 ; 36
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 196 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 197 ; 90
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 198 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 199 ; 4
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 76 ; direction forward
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 224
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 194 ; up
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 195 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 196 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 197 ; 36
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 198 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 199 ; 4
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 76 ; direction forward
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 224
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 224
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 159 ; right
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 160 ; 255
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 161 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 162 ; 125
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 163 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 164 ; 6
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 224
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 127
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 216 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 216 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 216 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 232 ; down
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 233 ; 249
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 234 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 235 ; 117
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 236 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 237 ; 8
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 84 ; direction back
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 160
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 160
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 232 ; down
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 233 ; 255
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 234 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 235 ; 6
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 236 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 237 ; 8
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 84 ; direction back
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 160
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 160
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 159 ; right
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 160 ; 255
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 161 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 162 ; 125
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 163 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 164 ; 10
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 160
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 109 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 232 ; down
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 233 ; 135
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 234 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 235 ; 4
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 236 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 237 ; 8
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 84 ; direction back
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 160
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 160
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 232 ; down
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 233 ; 255
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 234 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 235 ; 120
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 236 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 237 ; 8
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 84 ; direction back
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 160
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 160
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 125 ; left 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 126 ; 0
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 127 ; delta 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 128 ; 130
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 129 ; current_direction = 
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 130 ; 9
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 54 ; left wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 55 ; 0
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 65 ; right wheel speed = 
+Info File : C:\Users\Vanya\AppData\Local\Temp\arduino_build_656276\sketch\DCMotors.cpp ; Line : 66 ; 160
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 178 ; Center
+Info File : D:\Pavel\Arduino\ProjectCar\ProjectCar.ino ; Line : 178 ; Center
