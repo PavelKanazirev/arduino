@@ -18,7 +18,7 @@
 #define DEBUG_LEVEL_VERBOSE 3
 
 // set the current debug level from this line, no need to perform other changes
-#define CURRENT_DEBUG_LEVEL DEBUG_LEVEL_VERBOSE
+#define CURRENT_DEBUG_LEVEL DEBUG_LEVEL_OPTIMIZED
 
 #define TRACE_ERROR(param) if (CURRENT_DEBUG_LEVEL > DEBUG_LEVEL_OFF) { \
   Serial.print("Error at "); \

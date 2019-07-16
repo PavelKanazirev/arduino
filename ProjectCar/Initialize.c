@@ -6,7 +6,11 @@ result_t initialize_IOpins()
 
   TCCR1A = 0;
   TCCR1B = 0;
+  TCCR2A = 0;
+  TCCR2B = 0;
   OCR1A = 0;
+  OCR2A = 0;
+  OCR2B = 0;
   TIMSK1 = 0;
   
   DDRB = 0;

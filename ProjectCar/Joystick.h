@@ -26,6 +26,6 @@ typedef struct joystic_init_s {
 } joystic_init_t;
 
 result_t joystick_init(joystic_init_t const _cbck_list);
-result_t joystick_Task1ms();
+result_t joystick_Task10ms();
 
 #endif // JOYSTICK_H

@@ -130,7 +130,7 @@ result_t joystick_getHorn()
  return EOK;
 }
 
-result_t joystick_Task1ms()
+result_t joystick_Task10ms()
 {
   result_t result = EOK;
   unsigned int low, high = 0;

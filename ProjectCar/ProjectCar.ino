@@ -68,16 +68,23 @@ void setup() {
   dcmotors_init();
 
   Serial.begin(9600);
-  TRACE_INFO("Start");
+  TRACE_WARNING("Start");
 }
 
 void Task1ms()
 {
-  static unsigned int milliseconds = 0U;
-  milliseconds++;
+  static unsigned int detect10milliseconds = 0U;
+  if ( detect10milliseconds++ > 10000 )
+  {
+    TRACE_WARNING(" 10 sec ");
+    detect10milliseconds = 0;
+  }
 
-  joystick_Task1ms();
-  dcmotors_Task1ms();
+  if ( 0 == ( detect10milliseconds % 10 ) )
+  {
+    joystick_Task10ms();
+    dcmotors_Task10ms();
+  }
 }
 
 // main loop
@@ -106,14 +113,22 @@ static void JoysticLeftCommandDetected(unsigned int const _xAxis, unsigned int c
     current_direction = EIDLE;
     current_left_wheel_speed = DC_MOTORS_STOP;
     current_right_wheel_speed = DC_MOTORS_STOP;
-    TRACE_INFO("Center");
+//    TRACE_INFO("Center");
   }
   else if (!BIT_IS_SET(current_direction,ERIGHT_BIT))
   {
     if (BIT_IS_SET(current_direction, EUP_BIT))
     {
+      if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+      {
         current_left_wheel_speed = DC_MOTORS_MIN_SPEED;
-        current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;
+        current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;        
+      }
+      else
+      {
+        current_left_wheel_speed = DC_MOTORS_STOP;
+        current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+      }
     }
     else if (BIT_IS_SET(current_direction, EDOWN_BIT))
     {
@@ -122,15 +137,16 @@ static void JoysticLeftCommandDetected(unsigned int const _xAxis, unsigned int c
     }
 
     ENUM_BIT_SET(current_direction, ELEFT_BIT);
-    TRACE_INFO("left ");
-    TRACE_INFO(_xAxis);
-    TRACE_INFO("delta ");
-    TRACE_INFO(_delta);
-    TRACE_INFO("current_direction = ");
-    TRACE_INFO(current_direction);
-    dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);   // left motor slower
-    dcmotors_setRightDCMotorSpeed(current_right_wheel_speed); // right motor faster
+//    TRACE_INFO("left ");
+//    TRACE_INFO(_xAxis);
+//    TRACE_INFO("delta ");
+//    TRACE_INFO(_delta);
+//    TRACE_INFO("current_direction = ");
+//    TRACE_INFO(current_direction);
   }
+
+  dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);   // left motor slower
+  dcmotors_setRightDCMotorSpeed(current_right_wheel_speed); // right motor faster
 }
 
 static void JoysticRightCommandDetected(unsigned int const _xAxis, unsigned int const _yAxis, int const _delta)
@@ -140,14 +156,22 @@ static void JoysticRightCommandDetected(unsigned int const _xAxis, unsigned int 
     current_direction = EIDLE;
     current_left_wheel_speed = DC_MOTORS_STOP;
     current_right_wheel_speed = DC_MOTORS_STOP;
-    TRACE_INFO("Center");
+//    TRACE_INFO("Center");
   }
   else if (!BIT_IS_SET(current_direction,ELEFT_BIT))
   {
     if (BIT_IS_SET(current_direction, EUP_BIT))
     {
+      if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+      {
         current_left_wheel_speed = DC_MOTORS_GEAR3_SPEED;
         current_right_wheel_speed = DC_MOTORS_MIN_SPEED;
+      }
+      else
+      {
+        current_left_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+        current_right_wheel_speed = DC_MOTORS_STOP;        
+      }
     }
     else if (BIT_IS_SET(current_direction, EDOWN_BIT))
     {
@@ -156,16 +180,16 @@ static void JoysticRightCommandDetected(unsigned int const _xAxis, unsigned int 
     }
 
     ENUM_BIT_SET(current_direction, ERIGHT_BIT);
-    TRACE_INFO("right");
-    TRACE_INFO(_xAxis);
-    TRACE_INFO("delta ");
-    TRACE_INFO(_delta);
-    TRACE_INFO("current_direction = ");
-    TRACE_INFO(current_direction);
-      
-    dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);   // left motor faster
-    dcmotors_setRightDCMotorSpeed(current_right_wheel_speed); // right motor slower
+//    TRACE_INFO("right");
+//    TRACE_INFO(_xAxis);
+//    TRACE_INFO("delta ");
+//    TRACE_INFO(_delta);
+//    TRACE_INFO("current_direction = ");
+//    TRACE_INFO(current_direction);
   }
+
+  dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);   // left motor faster
+  dcmotors_setRightDCMotorSpeed(current_right_wheel_speed); // right motor slower
 }
 
 static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int const _yAxis, int const _delta)
@@ -175,7 +199,7 @@ static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int con
     current_direction = EIDLE;
     current_left_wheel_speed = DC_MOTORS_STOP;
     current_right_wheel_speed = DC_MOTORS_STOP;
-    TRACE_INFO("Center");
+//    TRACE_INFO("Center");
   }
   else if (!BIT_IS_SET(current_direction, EDOWN_BIT))
   { 
@@ -189,21 +213,37 @@ static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int con
         current_left_wheel_speed = DC_MOTORS_GEAR3_SPEED;
         current_right_wheel_speed = DC_MOTORS_MIN_SPEED;     
     }
-
-    ENUM_BIT_SET(current_direction, EUP_BIT);
-    TRACE_INFO("up");
-    TRACE_INFO(_yAxis);
-    TRACE_INFO("delta ");
-    TRACE_INFO(_delta);
-    TRACE_INFO("current_direction = ");
-    TRACE_INFO(current_direction);
-    dcmotors_setDirectionForward(BIT_IS_SET(current_direction,EUP_BIT));
-    // calculate speed based on _yAxis and _delta
-    current_left_wheel_speed = DC_MOTORS_GEAR3_SPEED;
-    current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;
-    dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);
-    dcmotors_setRightDCMotorSpeed(current_right_wheel_speed);
+    else
+    {
+      ENUM_BIT_SET(current_direction, EUP_BIT);
+  //    TRACE_INFO("up");
+  //    TRACE_INFO(_yAxis);
+  //    TRACE_INFO("delta ");
+  //    TRACE_INFO(_delta);
+  //    TRACE_INFO("current_direction = ");
+  //    TRACE_INFO(current_direction);
+      dcmotors_setDirectionForward(BIT_IS_SET(current_direction,EUP_BIT));
+      // calculate speed based on _yAxis and _delta      
+      if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT3)
+      {
+        current_left_wheel_speed = DC_MOTORS_MAX_SPEED;
+        current_right_wheel_speed = DC_MOTORS_MAX_SPEED;
+      }
+      else if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+      {
+        current_left_wheel_speed = DC_MOTORS_GEAR3_SPEED;
+        current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;
+      }
+      else if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT1)
+      {
+        current_left_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+        current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;        
+      }
+    }
   }
+
+  dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);
+  dcmotors_setRightDCMotorSpeed(current_right_wheel_speed);
 }
 
 static void JoysticDownCommandDetected(unsigned int const _xAxis, unsigned int const _yAxis, int const _delta)
@@ -213,7 +253,7 @@ static void JoysticDownCommandDetected(unsigned int const _xAxis, unsigned int c
     current_direction = EIDLE;
     current_left_wheel_speed = DC_MOTORS_STOP;
     current_right_wheel_speed = DC_MOTORS_STOP;
-    TRACE_INFO("Center");
+//    TRACE_INFO("Center");
   }
   else if (!BIT_IS_SET(current_direction,EUP_BIT))
   {
@@ -227,21 +267,32 @@ static void JoysticDownCommandDetected(unsigned int const _xAxis, unsigned int c
         current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
         current_right_wheel_speed = DC_MOTORS_STOP;      
     }
-
-    ENUM_BIT_SET(current_direction, EDOWN_BIT);
-    TRACE_INFO("down");
-    TRACE_INFO(_yAxis);
-    TRACE_INFO("delta ");
-    TRACE_INFO(_delta);
-    TRACE_INFO("current_direction = ");
-    TRACE_INFO(current_direction);
-    dcmotors_setDirectionForward(BIT_IS_SET(current_direction,EUP_BIT));
-    // calculate speed based on _yAxis and _delta
-    current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
-    current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;
-    dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);
-    dcmotors_setRightDCMotorSpeed(current_right_wheel_speed);
+    else
+    {
+      ENUM_BIT_SET(current_direction, EDOWN_BIT);
+  //    TRACE_INFO("down");
+  //    TRACE_INFO(_yAxis);
+  //    TRACE_INFO("delta ");
+  //    TRACE_INFO(_delta);
+  //    TRACE_INFO("current_direction = ");
+  //    TRACE_INFO(current_direction);
+      dcmotors_setDirectionForward(BIT_IS_SET(current_direction,EUP_BIT));
+      // calculate speed based on _yAxis and _delta
+      if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+      {
+        current_left_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+        current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+      }
+      else
+      {
+        current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
+        current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;        
+      }
+    }
   }
+
+  dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);
+  dcmotors_setRightDCMotorSpeed(current_right_wheel_speed);
 }
 
 static void JoysticButtonChangeDetected(
@@ -251,11 +302,11 @@ static void JoysticButtonChangeDetected(
   
   if (button_down)
   {
-    TRACE_INFO("button down");
+    TRACE_DEBUG("button down");
   }
   else 
   {
-    TRACE_INFO("button up");
+    TRACE_DEBUG("button up");
   }
 }
 
