@@ -6,9 +6,9 @@
 
 result_t buzzer_init()
 {
-//  OUTPUT // PD2 , pin 13
-  BIT_SET(DDRD,DDD2); // set the PD2 port direction to output
-  BIT_CLEAR(PORTD,PORTD2); // set the default value of the PD2 output to 0
+//  OUTPUT // PB2 , pin 10
+  BIT_SET(DDRB,DDB2); // set the PB2 port direction to output
+  BIT_CLEAR(PORTB,PORTB2); // set the default value of the PB2 output to 0
   
   return EOK;
 }
@@ -19,12 +19,12 @@ result_t buzzer_beep(bool const _enable)
   if ( _enable )
   {
     // beep
-    BIT_SET(PORTD,PD2); // set pin to 1
+    BIT_SET(PORTB,PB2); // set pin to 1
   }
   else
   {
     // silence
-    BIT_CLEAR(PORTD,PD2); // set pin to 0
+    BIT_CLEAR(PORTB,PB2); // set pin to 0
   }
   
   return result;

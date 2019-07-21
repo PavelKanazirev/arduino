@@ -18,8 +18,9 @@
 #define DEBUG_LEVEL_VERBOSE 3
 
 // set the current debug level from this line, no need to perform other changes
-#define CURRENT_DEBUG_LEVEL DEBUG_LEVEL_OPTIMIZED
+#define CURRENT_DEBUG_LEVEL DEBUG_LEVEL_OFF
 
+#if ( DEBUG_LEVEL_OFF != CURRENT_DEBUG_LEVEL )
 #define TRACE_ERROR(param) if (CURRENT_DEBUG_LEVEL > DEBUG_LEVEL_OFF) { \
   Serial.print("Error at "); \
   Serial.print("File : "); \
@@ -60,7 +61,17 @@
   Serial.println(param); \
 }
 
+#else
+
+#define TRACE_ERROR(param)
+#define TRACE_WARNING(param)
+#define TRACE_INFO(param)
+#define TRACE_DEBUG(param)
+
+#endif // ( 0 == DEBUG_LEVEL_OFF )
+
 #define BIT_IS_SET(byte,bit) (byte & (1<<bit))
+#define BIT_IS_CLEAR(byte,bit) !(byte & (1<<bit))
 #define BIT_SET(byte,bit) ((byte) |= (1<<(bit)))
 #define BIT_CLEAR(byte,bit) ((byte) &= ~(1<<(bit)))
 #define BIT_FLIP(byte,bit) ((byte) ^= (1<<(bit)))
@@ -68,9 +79,15 @@
 #define ENUM_BIT_SET(byte,bit) BIT_SET(byte,bit)
 #define ENUM_BIT_CLEAR(byte,bit) BIT_CLEAR(byte,bit)
 
+#define SREGI 7
+
 typedef enum result_e {
   EOK = 0,
-  ENOK = 1
+  ENOK = 1,
+  EOVERFLOW = 2,
+  EINPROGRESS = 3,
+  ETIMEOUT = 4,
+  ENULLPOINTER = 5
 } result_t;
 
 #endif // COMMONTYPES_H
