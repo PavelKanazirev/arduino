@@ -17,6 +17,7 @@ extern "C" {
   #include "Buzzer.h"
   #include "RGBLed.h"
   #include "DCMotors.h"
+  #include "twi_lcd_driver.h"
 }
 
 // global types
@@ -37,10 +38,11 @@ typedef enum direction_bit_e {
 
 typedef enum risk_level_e {
   ERISK_UNDEFINED = 0,
-  ERISK_NO,   // green light
-  ERISK_SMALL,  // light a telltale only
-  ERISK_BIG,  // trigger the buzzer
-  ERISK_CRITICAL, // stop the engines - discard the joystick forward command inputs
+  ERISK_SELF_DIAG,  // check sensor feedbacks
+  ERISK_NO,   // green light = OK
+  ERISK_SMALL,  // light a telltale only = WRN
+  ERISK_BIG,  // trigger the buzzer = ATT
+  ERISK_CRITICAL, // stop the engines - discard the joystick forward command inputs = EEL
   ERISK_MAX 
 } risk_level_t;
 
@@ -52,7 +54,12 @@ static void JoysticRightCommandDetected(unsigned int const _xAxis, unsigned int 
 static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int const _yAxis, int const _delta);
 static void JoysticDownCommandDetected(unsigned int const _xAxis, unsigned int const _yAxis, int const _delta);
 static void JoysticButtonChangeDetected(boolean const button_down);
+
 static bool currentPointInCenter(unsigned int const _xAxis, unsigned int const _yAxis);
+static unsigned char risk_to_ch(unsigned int _risk );
+static unsigned char direction_to_ch( unsigned int _direction );
+static unsigned char speed_to_gear_ch( unsigned int _speed );
+
 /*
  * this funxtion will use for read-only purposes the data from the global variables
  * unsigned int current_distance, unsigned int current_direction, current_left_wheel_speed, current_right_wheel_speed
@@ -75,8 +82,10 @@ risk_level_t current_risk = ERISK_UNDEFINED;
 // init
 void setup() {
   joystic_init_t joystick_callback_list;
-  
+
   initialize_IOpins();
+  initLCD();  
+
   joystick_callback_list.left_cmd_evt = &JoysticLeftCommandDetected;
   joystick_callback_list.right_cmd_evt = &JoysticRightCommandDetected;
   joystick_callback_list.down_cmd_evt = &JoysticDownCommandDetected;
@@ -166,6 +175,14 @@ void Task2ms()
         { // in the other use case the handler controls the buzzer state
             buzzer_beep(enableBeep);
         }
+
+        if ( display_Task10ms( risk_to_ch(current_risk),
+            direction_to_ch(current_direction), 
+            speed_to_gear_ch(current_left_wheel_speed), 
+            speed_to_gear_ch(current_right_wheel_speed) ) )
+        {
+            TRACE_ERROR(current_direction);
+        }
     }
 }
 
@@ -220,12 +237,12 @@ static void JoysticLeftCommandDetected(unsigned int const _xAxis, unsigned int c
     {
       if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
       {
-        current_left_wheel_speed = DC_MOTORS_MIN_SPEED;
+        current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
         current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;        
       }
       else
       {
-        current_left_wheel_speed = DC_MOTORS_STOP;
+        current_left_wheel_speed = DC_MOTORS_MIN_SPEED;
         current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
       }
     }
@@ -257,12 +274,12 @@ static void JoysticRightCommandDetected(unsigned int const _xAxis, unsigned int 
       if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
       {
         current_left_wheel_speed = DC_MOTORS_GEAR3_SPEED;
-        current_right_wheel_speed = DC_MOTORS_MIN_SPEED;
+        current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;
       }
       else
       {
         current_left_wheel_speed = DC_MOTORS_GEAR2_SPEED;
-        current_right_wheel_speed = DC_MOTORS_STOP;        
+        current_right_wheel_speed = DC_MOTORS_MIN_SPEED;        
       }
     }
     else if (BIT_IS_SET(current_direction, EDOWN_BIT))
@@ -290,13 +307,13 @@ static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int con
   { 
     if (BIT_IS_SET(current_direction, ELEFT_BIT))
     {
-        current_left_wheel_speed = DC_MOTORS_MIN_SPEED;
+        current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
         current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;
     }
     else if (BIT_IS_SET(current_direction, ERIGHT_BIT))
     {
         current_left_wheel_speed = DC_MOTORS_GEAR3_SPEED;
-        current_right_wheel_speed = DC_MOTORS_MIN_SPEED;     
+        current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;     
     }
     else
     {
@@ -473,4 +490,80 @@ static result_t projectCar_ADAS_Task10ms(risk_level_t * const _pRisk)
     }
 
     return result;
+}
+
+unsigned char risk_to_ch(unsigned int _risk )
+{
+    unsigned char ch_result = TWI_LCD_DIR_N;
+
+    if ( ERISK_SELF_DIAG == _risk )
+    {
+        ch_result = TWI_LCD_RISK_SELF_DIAG;
+    }
+    else if ( TWI_LCD_RISK_NO == _risk )
+    {
+        ch_result = TWI_LCD_RISK_NO;
+    }
+    else if ( TWI_LCD_RISK_SMALL == _risk )
+    {
+        ch_result = TWI_LCD_RISK_SMALL;
+    }
+    else if ( TWI_LCD_RISK_BIG == _risk )
+    {
+        ch_result = TWI_LCD_RISK_BIG;
+    }
+    else if (TWI_LCD_RISK_CRITICAL == _risk )
+    {
+        ch_result = TWI_LCD_RISK_CRITICAL;
+    }
+  
+    return ch_result;
+}
+
+unsigned char direction_to_ch(unsigned int _direction )
+{
+    unsigned char ch_result = TWI_LCD_DIR_N;
+
+    if ( ENUM_BIT_IS_SET(_direction, EUP_BIT) )
+    {
+        ch_result = TWI_LCD_DIR_FW;
+    }
+    else if ( ENUM_BIT_IS_SET( _direction, EDOWN_BIT ) )
+    {
+        ch_result = TWI_LCD_DIR_BW;
+    }
+  
+    return ch_result;
+}
+
+unsigned char speed_to_gear_ch(unsigned int _speed)
+{
+    unsigned char ch_result = TWI_LCD_GEAR0_SPEED;
+
+    TRACE_INFO("Speed");
+    if ((_speed >= DC_MOTORS_MIN_SPEED) && (_speed < DC_MOTORS_GEAR1_SPEED))
+    {
+        ch_result = TWI_LCD_GEAR0_SPEED;
+        TRACE_INFO(ch_result);
+    }
+    else if ((_speed >= DC_MOTORS_GEAR1_SPEED) && (_speed < DC_MOTORS_GEAR2_SPEED))
+    {
+        ch_result = TWI_LCD_GEAR1_SPEED;
+        TRACE_INFO(ch_result);      
+    }
+    else if ((_speed >= DC_MOTORS_GEAR2_SPEED) && (_speed < DC_MOTORS_GEAR3_SPEED))
+    {
+        ch_result = TWI_LCD_GEAR2_SPEED;
+        TRACE_INFO(ch_result);
+    }
+    else if ( (_speed >= DC_MOTORS_GEAR3_SPEED) && (_speed <= DC_MOTORS_MAX_SPEED) )
+    {
+        ch_result = TWI_LCD_GEAR3_SPEED;
+        TRACE_INFO(ch_result);
+    }
+
+    TRACE_INFO(_speed);
+    TRACE_INFO(ch_result);
+
+    return ch_result;
 }

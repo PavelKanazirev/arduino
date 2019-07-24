@@ -76,6 +76,8 @@
 #define BIT_CLEAR(byte,bit) ((byte) &= ~(1<<(bit)))
 #define BIT_FLIP(byte,bit) ((byte) ^= (1<<(bit)))
 
+#define ENUM_BIT_IS_SET(byte,bit) BIT_IS_SET(byte,bit)
+#define ENUM_BIT_IS_CLEAR(byte,bit) BIT_IS_CLEAR(byte,bit)
 #define ENUM_BIT_SET(byte,bit) BIT_SET(byte,bit)
 #define ENUM_BIT_CLEAR(byte,bit) BIT_CLEAR(byte,bit)
 
