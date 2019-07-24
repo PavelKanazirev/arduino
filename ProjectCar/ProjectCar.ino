@@ -233,26 +233,30 @@ static void JoysticLeftCommandDetected(unsigned int const _xAxis, unsigned int c
   }
   else if (!BIT_IS_SET(current_direction,ERIGHT_BIT))
   {
-    if (BIT_IS_SET(current_direction, EUP_BIT))
-    {
-      if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+      if (BIT_IS_SET(current_direction, EUP_BIT))
       {
-        current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
-        current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;        
+          if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+          {
+              current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
+              current_right_wheel_speed = DC_MOTORS_GEAR3_SPEED;
+          }
+          else
+          {
+              current_left_wheel_speed = DC_MOTORS_MIN_SPEED;
+              current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+          }
       }
-      else
+      else if (BIT_IS_SET(current_direction, EDOWN_BIT))
       {
-        current_left_wheel_speed = DC_MOTORS_MIN_SPEED;
-        current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+          current_left_wheel_speed = DC_MOTORS_STOP;
+          current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;      
       }
-    }
-    else if (BIT_IS_SET(current_direction, EDOWN_BIT))
-    {
-        current_left_wheel_speed = DC_MOTORS_STOP;
-        current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;      
-    }
-
-    ENUM_BIT_SET(current_direction, ELEFT_BIT);
+  
+      ENUM_BIT_SET(current_direction, ELEFT_BIT);
+  }
+  else
+  {
+      ENUM_BIT_CLEAR(current_direction,ERIGHT_BIT);
   }
 
   dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);   // left motor slower
@@ -290,6 +294,10 @@ static void JoysticRightCommandDetected(unsigned int const _xAxis, unsigned int 
 
     ENUM_BIT_SET(current_direction, ERIGHT_BIT);
   }
+  else
+  {
+      ENUM_BIT_CLEAR(current_direction,ELEFT_BIT);
+  }
 
   dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);   // left motor faster
   dcmotors_setRightDCMotorSpeed(current_right_wheel_speed); // right motor slower
@@ -304,7 +312,7 @@ static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int con
     current_right_wheel_speed = DC_MOTORS_STOP;
   }
   else if (!BIT_IS_SET(current_direction, EDOWN_BIT))
-  { 
+  {
     if (BIT_IS_SET(current_direction, ELEFT_BIT))
     {
         current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
@@ -337,6 +345,10 @@ static void JoysticUpCommandDetected(unsigned int const _xAxis, unsigned int con
       }
     }
   }
+  else
+  {
+      ENUM_BIT_CLEAR(current_direction, EDOWN_BIT);
+  }
 
   dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);
   dcmotors_setRightDCMotorSpeed(current_right_wheel_speed);
@@ -364,20 +376,24 @@ static void JoysticDownCommandDetected(unsigned int const _xAxis, unsigned int c
     }
     else
     {
-      ENUM_BIT_SET(current_direction, EDOWN_BIT);
-      dcmotors_setDirectionForward(BIT_IS_SET(current_direction,EUP_BIT));
-      // calculate speed based on _yAxis and _delta
-      if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
-      {
-        current_left_wheel_speed = DC_MOTORS_GEAR2_SPEED;
-        current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
-      }
-      else
-      {
-        current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
-        current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;        
-      }
+        ENUM_BIT_SET(current_direction, EDOWN_BIT);
+        dcmotors_setDirectionForward(BIT_IS_SET(current_direction,EUP_BIT));
+        // calculate speed based on _yAxis and _delta
+        if (_delta > DC_MOTORS_DELTA_TORQUE_LIMIT2)
+        {
+            current_left_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+            current_right_wheel_speed = DC_MOTORS_GEAR2_SPEED;
+        }
+        else
+        {
+            current_left_wheel_speed = DC_MOTORS_GEAR1_SPEED;
+            current_right_wheel_speed = DC_MOTORS_GEAR1_SPEED;        
+        }
     }
+  }
+  else
+  {
+      ENUM_BIT_CLEAR(current_direction, EUP_BIT);
   }
 
   dcmotors_setLeftDCMotorSpeed(current_left_wheel_speed);
