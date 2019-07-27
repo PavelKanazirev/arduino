@@ -9,6 +9,8 @@
 
 #include "twi_lcd_driver.h"
 
+#define TWI_100KHZ_PRECALCULATED_BIT_RATE_VALUE 72
+
 #define TWI_LCD_RISK_SELF_DIAG 'D'
 #define TWI_LCD_RISK_NO 'N'
 #define TWI_LCD_RISK_SMALL 'W'

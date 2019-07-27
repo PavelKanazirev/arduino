@@ -207,10 +207,10 @@ static void UltraSensorDistanceChange(unsigned int const _distance)
 {
   if (current_distance != _distance)
   {
-      TRACE_INFO("Old distance:");
-      TRACE_INFO(current_distance);
-      TRACE_INFO("New distance:");
-      TRACE_INFO(_distance);
+      TRACE_DEBUG("Old distance:");
+      TRACE_DEBUG(current_distance);
+      TRACE_DEBUG("New distance:");
+      TRACE_DEBUG(_distance);
       current_distance = _distance;
   }
 }
@@ -548,30 +548,30 @@ unsigned char speed_to_gear_ch(unsigned int _speed)
 {
     unsigned char ch_result = TWI_LCD_GEAR0_SPEED;
 
-    TRACE_INFO("Speed");
+    TRACE_DEBUG("Speed");
     if ((_speed >= DC_MOTORS_MIN_SPEED) && (_speed < DC_MOTORS_GEAR1_SPEED))
     {
         ch_result = TWI_LCD_GEAR0_SPEED;
-        TRACE_INFO(ch_result);
+        TRACE_DEBUG(ch_result);
     }
     else if ((_speed >= DC_MOTORS_GEAR1_SPEED) && (_speed < DC_MOTORS_GEAR2_SPEED))
     {
         ch_result = TWI_LCD_GEAR1_SPEED;
-        TRACE_INFO(ch_result);      
+        TRACE_DEBUG(ch_result);      
     }
     else if ((_speed >= DC_MOTORS_GEAR2_SPEED) && (_speed < DC_MOTORS_GEAR3_SPEED))
     {
         ch_result = TWI_LCD_GEAR2_SPEED;
-        TRACE_INFO(ch_result);
+        TRACE_DEBUG(ch_result);
     }
     else if ( (_speed >= DC_MOTORS_GEAR3_SPEED) && (_speed <= DC_MOTORS_MAX_SPEED) )
     {
         ch_result = TWI_LCD_GEAR3_SPEED;
-        TRACE_INFO(ch_result);
+        TRACE_DEBUG(ch_result);
     }
 
-    TRACE_INFO(_speed);
-    TRACE_INFO(ch_result);
+    TRACE_DEBUG(_speed);
+    TRACE_DEBUG(ch_result);
 
     return ch_result;
 }

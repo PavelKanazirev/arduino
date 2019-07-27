@@ -16,6 +16,7 @@
 
 #define I2C_read 1
 #define I2C_write 0
+// ATMega328 datasheet: After a START condition has been transmitted, the TWINT Flag is set by hardware
 #define wait while(!(TWCR & (1 << TWINT)))
 #define ADRS 0x27
 
@@ -124,66 +125,95 @@ void TWI_stop();
 
 void TWI_init() {
   
-  // (Fc)/[16+2(TWBR)*(PrescalerValue)]
+  // (Fc = 16 000 000 )/[16+2 * (TWBR = 72)*(PrescalerValue = 1)] = 100 000
   // initialize TWI clock: 100 kHz clock, TWPS = 0 => prescaler = 1
   TWSR = 0x00; // no prescaler
-  TWBR = 72;   // set SCL to 100 KHz as the Standard is
+  TWBR = TWI_100KHZ_PRECALCULATED_BIT_RATE_VALUE;   // set SCL to 100 KHz as the Standard is
 }
 
+//  ATMega328 datasheet: page 226
 void TWI_start() {
+  // ATMega328 datasheet: The first step in a TWI transmission is to transmit a START condition. This is done by
+  // writing a specific value into TWCR, instructing the TWI hardware to transmit a START condition.
+  // it is important that the TWINT bit is set in the value written
   TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTA);
+  // Wait for TWINT Flag set. This indicates that the START condition has been transmitted
   wait;
 
   volatile uint8_t status= TWSR & 0xF8;
-  while(status != TW_START)
+  // value specified at https://www.microchip.com/webdoc/AVRLibcReferenceManual/ch20s33s01.html
+  // Check value of TWI Status Register. Mask prescaler bits. If status different from START go to ERROR
+  while (status != TW_START)
   {
-      TRACE_INFO("Stuck in START loop");
+      TRACE_ERROR("Stuck in START loop");
   }
   
-  TRACE_INFO("START Acknowledged");
+  TRACE_DEBUG("START Acknowledged");
   cartimer_delayMicroseconds(10); // two clock cycles at Timer2 configuration
 }
 
+// HD44780 datasheet: Bus Timing Characteristics used for the delays page 49
+// HD44780 datasheet: page 25
+// RS R/W DB7   DB6 DB5 DB4 DB3 DB2 DB1 DB0
+// 1  0   Write data
+// ATMega328 datasheet: Figure 19-10. Interfacing the Application to the TWI in a Typical Transmission
 void TWI_write_adrs(uint8_t adrs) {
   wait;
+  // ATMega328 datasheet: page 226 Load SLA_W into TWDR Register. Clear TWINT bit in TWCR to start transmission of address
   TWDR = adrs<<1 + I2C_write;
   TWCR = (1 << TWINT) | (1 << TWEN);
+  // Wait for TWINT Flag set. This indicates that the SLA+W has been transmitted, and ACK/NACK has been received.
   wait;
   
   //uint8_t status = TWSR & 0b1111100;
+  // Check value of TWI Status Register. Mask prescaler bits. If status different from MT_SLA_ACK go to ERROR
+  // ATMega328 datasheet: Table 19-2. Status codes for Master Transmitter Mode
   volatile uint8_t status= TWSR & 0xF8;
   while (status != TW_MT_SLA_ACK) 
   {
-    // TRACE_INFO("Stuck in SLAV+R/W loop");
+      TRACE_ERROR("Stuck in SLAV+R/W loop");
   }
 
-//  TRACE_INFO("SLAVE Acknowledged");
+  TRACE_DEBUG("SLAVE Acknowledged");
   cartimer_delayMicroseconds(10); // one clock cycle at 100 KHz
 }
 
 
+// HD44780 datasheet: Bus Timing Characteristics used for the delays page 49
+// HD44780 datasheet: page 25
+// RS R/W DB7   DB6 DB5 DB4 DB3 DB2 DB1 DB0
+// 1  0   Write data
+// ATMega328 datasheet: Figure 19-10. Interfacing the Application to the TWI in a Typical Transmission
 void TWI_write_data(uint8_t data) {
   wait;
+  // ATMega328 datasheet: page 226 Load DATA into TWDR Register. 
   TWDR = data;
+  // Clear TWINT bit in TWCR to start transmission of data
   TWCR = (1 << TWINT) | (1 << TWEN);
+  // Wait for TWINT Flag set. This indicates that the DATA has been transmitted, and ACK/NACK has been received.
   wait;
 
-  volatile uint8_t status= 0x28;
+  // ATMega328 datasheet: page 226 Check value of TWI Status Register. Mask prescaler bits. If status different from MT_DATA_ACK go to ERROR
+  // ATMega328 datasheet: Table 19-2. Status codes for Master Transmitter Mode
+  // https://www.microchip.com/webdoc/AVRLibcReferenceManual/group__util__twi_1ga4c28186053b5298305b131ad3e1111f7.html
+  // #define TW_MT_DATA_ACK 0x28
+  volatile uint8_t status = TWSR & 0xF8; // 0x28 ?
   while(status != TW_MT_DATA_ACK)
   {
-    //  TRACE_INFO("Stuck in WRITE DATA loop");
+      //  TRACE_DEBUG("Stuck in WRITE DATA loop");
   }
   
-  // TRACE_INFO("DATA SENT");
-  cartimer_delayMicroseconds(50); // commands need > 37us to settle
+  // TRACE_DEBUG("DATA SENT");
+  cartimer_delayMicroseconds(10); // commands need > 37us to settle
 }
 
 
 void TWI_stop() {
+  // ATMega328 datasheet: page 226  Transmit STOP condition
   TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
   while(!(TWCR & (1<<TWSTO)));  // Wait till stop condition is transmitted
 
-//  TRACE_INFO("STOP");
+//  TRACE_DEBUG("STOP");
   cartimer_delayMicroseconds(10); // one clock cycle at 100 KHz
 }
 
@@ -329,8 +359,8 @@ void initLCD() {
   _cols=16;
   _rows=2;
   
-  // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-  // according to datasheet, we need at least 40ms after power rises above 2.7V
+  // HD44780U datasheet: PAGE 45/46 Figures 23
+  // Wait for more than 40 ms after VCC rises to 2.7 V
   // before sending commands. Arduino can turn on way befer 4.5V so we'll wait 41
   cartimer_delayMicroseconds(41000);
   
@@ -338,7 +368,7 @@ void initLCD() {
   expanderWrite(_backlightval); // reset expander and turn backlight off (Bit 8 =1)
   for ( unsigned i = 0; i < 20; i++ )
   {
-    cartimer_delayMicroseconds(50000);
+      cartimer_delayMicroseconds(50000);
   }
 
     //put the LCD into 4 bit mode
@@ -415,7 +445,7 @@ result_t display_StaticData()
         send(c5[i], Rs);
     }
 
-    setCursor(13,0);          
+    setCursor(13,1);
     char c6[] = "D:";
     for(int i = 0; c6[i] != '\0'; ++i)
     {

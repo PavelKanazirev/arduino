@@ -56,15 +56,17 @@ result_t dcmotors_init()
   BIT_CLEAR(TCCR2A, COM2B1); // clear the bit that will be used for enabling
   // configure timer 2 for phase correct pwm (8-bit)
   // counter is incremented from 0 to the value stored in OCR2A
-// The type of timer/counter 2 is mode 1, the Phase Correct PWM
+  // The type of timer/counter 2 is mode 1, the Phase Correct PWM
+  // Atmega325 datasheet: Table 15-8. Waveform Generation Mode Bit Description
   BIT_SET(TCCR2A, WGM20); // WGM22 - WGM20 b001 - PWM, Phase Correct chosen
   BIT_CLEAR(TCCR2A, WGM21); // WGM22 - WGM20 b001 - PWM, Phase Correct chosen
   BIT_CLEAR(TCCR2B, WGM22); // WGM22 - WGM20 b001 - PWM, Phase Correct chosen
   // set timer 2 prescale factor to 64
+  // Atmega325 datasheet: Table 15-9. Clock Select Bit Description
   BIT_SET(TCCR2B, CS22); // CS20 - CS22 b100 prescaler set to 64
   BIT_CLEAR(TCCR2B, CS21); // CS20 - CS22 b100 prescaler set to 64
   BIT_CLEAR(TCCR2B, CS20); // CS20 - CS22 b100 prescaler set to 64
-  // 16000000 / (64*510) = 490 Hz
+
   return EOK;
 }
 
@@ -85,14 +87,20 @@ result_t dcmotors_setLeftDCMotorSpeed(unsigned int _speed)
 
   // set the duty cycle value for pin 3 - left PWM
   if (0 < current_left_wheel_speed)
-  {
-    BIT_SET(TCCR2A, COM2B1);
-    OCR2B = current_left_wheel_speed; // set pwm duty for pin 3
+  { 
+    // Atmega325 datasheet:  Table 15-7. Compare Output Mode Phase Correct PWM Mode
+    // When OC2B is connected to the pin, the function of the COM2B1:0 bits depends on the WGM22:0 bit setting
+    BIT_SET(TCCR2A, COM2B1);    // If one or both of the COM2B1:0 bits are set, the OC2B output overrides the normal port functionality of the I/O pin it is connected to.
+    //  Atmega325 datasheet: The Output Compare Register B contains an 8-bit value that is continuously compared with the
+    // counter value (TCNT2). A match can be used to generate an Output Compare interrupt, or to
+    // generate a waveform output on the OC2B pin 
+    // Figure 1-1. Pinout ATmega48P/88P/168P/328P - (PCINT19/OC2B/INT1) PD3
+    OCR2B = current_left_wheel_speed; // set pwm duty for PD3 = pin 3
   }
   else
   {
     BIT_SET(TCCR2A, COM2B1);
-    OCR2B = current_left_wheel_speed; // set pwm duty for pin 3
+    OCR2B = current_left_wheel_speed; // set  ( clear ) pwm duty for PD3 = pin 3
   }
 
   return EOK;  
@@ -113,16 +121,22 @@ result_t dcmotors_setRightDCMotorSpeed(unsigned int _speed)
     current_right_wheel_speed = _speed;
   }
 
-  // set the duty cycle value for pin 11 - right PWM
+  // set the duty cycle value for PB3 = pin 11 - right PWM
   if (0 < current_right_wheel_speed)
   {
+    // Atmega325 datasheet: Table 15-4. Compare Output Mode, Phase Correct PWM Mode
+    // When OC2A is connected to the pin, the function of the COM2A1:0 bits depends on the WGM22:0 bit setting
+    // If one or both of the COM2A1:0 bits are set, the OC2A output overrides the normal port functionality of 
+    // the I/O pin it is connected to.
     BIT_SET(TCCR2A, COM2A1);
-    OCR2A = current_right_wheel_speed; // set pwm duty
+    // Atmega325 datasheet: Figure 1-1. Pinout ATmega48P/88P/168P/328P - PB3 (MOSI/OC2A/PCINT3)
+    // A match can be used to generate an Output Compare interrupt, or to generate a waveform output on the OC2A pin
+    OCR2A = current_right_wheel_speed; // set pwm duty for PB3
   }
   else
   {
     BIT_SET(TCCR2A, COM2A1);
-    OCR2A = current_right_wheel_speed; // set pwm duty
+    OCR2A = current_right_wheel_speed; // set ( clear ) pwm duty for PB3 = pin 11
   }
   
   return EOK;  
@@ -133,7 +147,7 @@ result_t dcmotors_setDirectionForward(bool const _direction)
   directionForward = _direction;
   if (directionForward)
   {// set in1 HIGH, in2 LOW, in3 HIGH, in4 LOW
-//    TRACE_INFO("direction forward");
+//    TRACE_DEBUG("direction forward");
     BIT_SET(PORTD,PD6); // PD6 , pin 6 = L298N in1 - right motor direction
     BIT_CLEAR(PORTD,PD7); // PD7 , pin 7 = L298N in2 - right motor direction
     BIT_SET(PORTB,PB0); // PB0 , pin 8 = L298N in3 - left motor direction
@@ -141,7 +155,7 @@ result_t dcmotors_setDirectionForward(bool const _direction)
   }
   else
   {// set in1 LOW, in2 HIGH, in3 LOW, in4 HIGH
-//    TRACE_INFO("direction back");
+//    TRACE_DEBUG("direction back");
     BIT_CLEAR(PORTD,PD6); // PD6 , pin 6 = L298N in1 - right motor direction
     BIT_SET(PORTD,PD7); // PD7 , pin 7 = L298N in2 - right motor direction
     BIT_CLEAR(PORTB,PB0); // PB0 , pin 8 = L298N in3 - left motor direction

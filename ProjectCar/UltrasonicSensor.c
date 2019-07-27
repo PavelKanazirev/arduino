@@ -48,14 +48,19 @@ result_t ultraSensor_init(ultraSensor_echo_callback_fxn_t _cb)
   // pin 13 : PB5 Out - sends trigger signal
   BIT_SET(DDRB,PB5); // set the PB5 port direction to output
   BIT_CLEAR(PORTB,PB5); // set the default value of the PB5 output to 0
-  // pin 2 : PD2 In - receive feedback about the distance of an object detected 2 to 400 sm 
+  // pin 2 : PD2 In - receive feedback about the distance of an object detected 2 to 400 sm
+  // Atmega328 datasheet: Figure 1-1. Pinout ATmega48P/88P/168P/328P (PCINT18/INT0) PD2 
   BIT_CLEAR(DDRD,DDD2); // set the PD2 port direction to input
-//  BIT_SET(PORTD,PD2); // pull up resistor is activated for the the echo pin
   BIT_CLEAR(PORTD,PD2); // the rising edge output of ECHO port // obsolette call
 
   // The second instruction defines that any logical change at the INT0/PIND2 Pin will cause the microcontroller.
+  // Atmega328 datasheet: The INT0 and INT1 interrupts can be triggered by a falling or rising edge or a low level. This is
+  // set up as indicated in the specification for the External Interrupt Control Register A – EICRA
   BIT_SET(EICRA,ISC00); // Any logical change on INT0 generates an interrupt request
   // This Instruction is used to configure the PIN D2 as an interrupt PIN as the ECHO pin of the sensor is connected here.
+  // Atmega328 datasheet: When the INT0 bit is set (one) and the I-bit in the Status Register (SREG) is set (one), the external pin interrupt is enabled. 
+  // The Interrupt Sense Control0 bits 1/0 (ISC01 and ISC00) in the External Interrupt Control Register A (EICRA) define whether the external interrupt is activated
+  // on rising and/or falling edge of the INT0 pin or level sensed.
   BIT_SET(EIMSK,INT0); // When INT0 bit is set and the I-bit in the Status Register (SREG) is set (one), the external pin interrupt is enabled.
 //  BIT_SET(SREG,SREGI); // Global Interrupt Enable bit must be set for the interrupts to be enabled.
   sei();
@@ -251,8 +256,11 @@ static boolean is_distance_change_real(unsigned int current_distance_measured )
  * The echo pin is the one that becomes high after it receives reflected waves. 
  * The time for which the echo pin is high is directly proportional to the distance of the obstacle from sensor.
  */
-ISR(INT0_vect)
+// Atmega328 datasheet: Table 9-6.
+ISR(INT0_vect) // (PCINT18/INT0) PD2 = pin 2
 {
+  // Atmega328 datasheet: The External Interrupts are triggered by the INT0 and INT1 pins or any of the PCINT23..0 pins.
+  // The INT0 and INT1 interrupts can be triggered by a falling or rising edge or a low level
   if ( ( ESTATE_TRIGGER_SENT == current_state ) || (ESTATE_ECHO_RECEIVING == current_state) )
   {
     if ( 1 == echoPinState )

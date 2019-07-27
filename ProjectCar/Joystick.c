@@ -30,8 +30,6 @@ result_t joystick_init(joystic_init_t const _cbck_list)
   BIT_SET(ADCSRA,ADEN); // enables ADC
   // set a2d prescale factor to 128
   // 16 MHz / 128 = 125 KHz, inside the desired 50-200 KHz range.
-  // XXX: this will not work properly for other clock speeds, and
-  // this code should use F_CPU to determine the prescale factor.
   BIT_SET(ADCSRA, ADPS2);
   BIT_SET(ADCSRA, ADPS1);
   BIT_SET(ADCSRA, ADPS0);
@@ -52,7 +50,8 @@ result_t joystick_getXAxis(unsigned int * const _pX_value, unsigned int * const 
   uint8_t high = 0U;
 
   if ( NULL != _pX_value )
-  {  
+  {
+    // ATMEGA datasheet - b01 ( REFS1, REFS0) = AVCC with external capacitor at AREF pin
     BIT_SET(ADMUX,REFS0);  // when REFS0 = 1 
     BIT_CLEAR(ADMUX,REFS1); // REFS1 = 0 - AVcc with external capacitor 
     BIT_CLEAR(ADMUX,ADLAR); // set to 0 for right adjusted result
@@ -61,13 +60,15 @@ result_t joystick_getXAxis(unsigned int * const _pX_value, unsigned int * const 
     BIT_CLEAR(ADMUX,MUX1); // b0
     BIT_CLEAR(ADMUX,MUX0); // b0
     BIT_SET(ADCSRA,ADSC); // start the conversion
+    // ATMEGA328 datasheet: ADSC will read as one as long as a conversion is in progress. When the conversion is complete, it returns to zero.
     while (BIT_IS_SET(ADCSRA, ADSC)); // ADSC is cleared when the conversion finishes
     // we have to read ADCL first; doing so locks both ADCL
     // and ADCH until ADCH is read.  reading ADCL second would
     // cause the results of each conversion to be discarded,
     // as ADCL and ADCH would be locked when it completed.
-    low  = ADCL;
-    high = ADCH;
+    //  ATMEGA328 datasheet: When an ADC conversion is complete, the result is found in these two registers.
+    low  = ADCL; // carries ADC0 ( LSB ) and ADC7 when ADLAR = 0 // right adjusted result
+    high = ADCH; // carries ADC9 ( MSB ) and ADC8 when ADLAR = 0 // right adjusted result
     *_pX_value = (low>>2) + (high<<6);
     *_low = low;
     *_high = high;
@@ -88,7 +89,8 @@ result_t joystick_getYAxis(unsigned int * const _pY_value, unsigned int * const 
 
   if ( NULL != _pY_value )
   {
-    BIT_SET(ADMUX,REFS0);  // when REFS0 = 1 
+    // ATMEGA datasheet - b01 ( REFS1, REFS0) = AVCC with external capacitor at AREF pin
+    BIT_SET(ADMUX,REFS0);   // REFS0 = 1 
     BIT_CLEAR(ADMUX,REFS1); // REFS1 = 0 - AVcc with external capacitor 
     BIT_CLEAR(ADMUX,ADLAR); // set to 0 for right adjusted result
     BIT_CLEAR(ADMUX,MUX3);   // b0001 for ADC1
@@ -101,8 +103,9 @@ result_t joystick_getYAxis(unsigned int * const _pY_value, unsigned int * const 
     // and ADCH until ADCH is read.  reading ADCL second would
     // cause the results of each conversion to be discarded,
     // as ADCL and ADCH would be locked when it completed.
-    low  = ADCL;
-    high = ADCH;
+    //  ATMEGA328 datasheet: When an ADC conversion is complete, the result is found in these two registers.
+    low  = ADCL; // carries ADC0 ( LSB ) and ADC7 when ADLAR = 0 // right adjusted result
+    high = ADCH; // carries ADC9 ( MSB ) and ADC8 when ADLAR = 0 // right adjusted result
     *_pY_value = (low >> 2) + (high << 6);
     *_low = low;
     *_high = high;

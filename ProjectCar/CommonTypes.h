@@ -41,7 +41,7 @@
   Serial.println(param); \
 }
 
-#define TRACE_INFO(param) if (CURRENT_DEBUG_LEVEL > DEBUG_LEVEL_OPTIMIZED) { \
+#define TRACE_DEBUG(param) if (CURRENT_DEBUG_LEVEL > DEBUG_LEVEL_OPTIMIZED) { \
   Serial.print("Info "); \
   Serial.print("File : "); \
   Serial.print(__FILE__); \
@@ -65,7 +65,7 @@
 
 #define TRACE_ERROR(param)
 #define TRACE_WARNING(param)
-#define TRACE_INFO(param)
+#define TRACE_DEBUG(param)
 #define TRACE_DEBUG(param)
 
 #endif // ( 0 == DEBUG_LEVEL_OFF )
