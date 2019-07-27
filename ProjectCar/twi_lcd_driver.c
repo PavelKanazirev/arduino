@@ -149,7 +149,7 @@ void TWI_start() {
   }
   
   TRACE_DEBUG("START Acknowledged");
-  cartimer_delayMicroseconds(10); // two clock cycles at Timer2 configuration
+  cartimer_delayMicroseconds(10);
 }
 
 // HD44780 datasheet: Bus Timing Characteristics used for the delays page 49
@@ -175,7 +175,7 @@ void TWI_write_adrs(uint8_t adrs) {
   }
 
   TRACE_DEBUG("SLAVE Acknowledged");
-  cartimer_delayMicroseconds(10); // one clock cycle at 100 KHz
+  cartimer_delayMicroseconds(10);
 }
 
 
@@ -214,7 +214,7 @@ void TWI_stop() {
   while(!(TWCR & (1<<TWSTO)));  // Wait till stop condition is transmitted
 
 //  TRACE_DEBUG("STOP");
-  cartimer_delayMicroseconds(10); // one clock cycle at 100 KHz
+  cartimer_delayMicroseconds(10);
 }
 
 //----------------end I2C communication-----------------------------------//
