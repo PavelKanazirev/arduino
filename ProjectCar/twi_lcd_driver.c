@@ -7,6 +7,7 @@
 #include <compat/twi.h>
 #include <avr/delay.h>
 
+#include "CarTimer.h"
 #include "twi_lcd_driver.h"
 
 // Specification https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
@@ -136,11 +137,11 @@ void TWI_start() {
   volatile uint8_t status= TWSR & 0xF8;
   while(status != TW_START)
   {
-//      TRACE_INFO("Stuck in START loop");
+      TRACE_INFO("Stuck in START loop");
   }
   
-//  TRACE_INFO("START Acknowledged");
-  delayMicroseconds(10); // two clock cycles at 100 KHz
+  TRACE_INFO("START Acknowledged");
+  cartimer_delayMicroseconds(10); // two clock cycles at Timer2 configuration
 }
 
 void TWI_write_adrs(uint8_t adrs) {
@@ -157,7 +158,7 @@ void TWI_write_adrs(uint8_t adrs) {
   }
 
 //  TRACE_INFO("SLAVE Acknowledged");
-  delayMicroseconds(10); // one clock cycle at 100 KHz
+  cartimer_delayMicroseconds(10); // one clock cycle at 100 KHz
 }
 
 
@@ -174,7 +175,7 @@ void TWI_write_data(uint8_t data) {
   }
   
   // TRACE_INFO("DATA SENT");
-  delayMicroseconds(1500);// delayMicroseconds(50);    // commands need > 37us to settle
+  cartimer_delayMicroseconds(50); // commands need > 37us to settle
 }
 
 
@@ -183,7 +184,7 @@ void TWI_stop() {
   while(!(TWCR & (1<<TWSTO)));  // Wait till stop condition is transmitted
 
 //  TRACE_INFO("STOP");
-  delayMicroseconds(10); // one clock cycle at 100 KHz
+  cartimer_delayMicroseconds(10); // one clock cycle at 100 KHz
 }
 
 //----------------end I2C communication-----------------------------------//
@@ -192,12 +193,12 @@ void TWI_stop() {
 /********** high level commands, for the user! */
 void clear(){
   command(LCD_CLEARDISPLAY);// clear display, set cursor position to zero
-  delayMicroseconds(2000);  // this command takes a long time!
+  cartimer_delayMicroseconds(2000);  // this command takes a long time!
 }
 
 void home(){
   command(LCD_RETURNHOME);  // set cursor position to zero
-  delayMicroseconds(2000);  // this command takes a long time!
+  cartimer_delayMicroseconds(2000);  // this command takes a long time!
 }
 
 void setCursor(uint8_t col, uint8_t row){
@@ -312,10 +313,10 @@ void expanderWrite(uint8_t _data){
 
 void pulseEnable(uint8_t _data){
   expanderWrite(_data | En);  // En high
-  delayMicroseconds(1);   // enable pulse must be >450ns
+  cartimer_delayMicroseconds(1);   // enable pulse must be >450ns
   
   expanderWrite(_data & ~En); // En low
-  delayMicroseconds(50);    // commands need > 37us to settle
+  cartimer_delayMicroseconds(50);    // commands need > 37us to settle
 }
 
 void initLCD() {
@@ -330,12 +331,15 @@ void initLCD() {
   
   // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
   // according to datasheet, we need at least 40ms after power rises above 2.7V
-  // before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
-  delay(50); 
+  // before sending commands. Arduino can turn on way befer 4.5V so we'll wait 41
+  cartimer_delayMicroseconds(41000);
   
   // Now we pull both RS and R/W low to begin commands
-  expanderWrite(_backlightval); // reset expanderand turn backlight off (Bit 8 =1)
-  delay(1000);
+  expanderWrite(_backlightval); // reset expander and turn backlight off (Bit 8 =1)
+  for ( unsigned i = 0; i < 20; i++ )
+  {
+    cartimer_delayMicroseconds(50000);
+  }
 
     //put the LCD into 4 bit mode
   // this is according to the hitachi HD44780 datasheet
@@ -343,15 +347,15 @@ void initLCD() {
   
     // we start in 8bit mode, try to set 4 bit mode
    write4bits(0x03 << 4);
-   delayMicroseconds(4500); // wait min 4.1ms
+   cartimer_delayMicroseconds(4100); // wait min 4.1ms
    
    // second try
    write4bits(0x03 << 4);
-   delayMicroseconds(4500); // wait min 4.1ms
+   cartimer_delayMicroseconds(4100); // wait min 4.1ms
    
    // third go!
    write4bits(0x03 << 4); 
-   delayMicroseconds(150);
+   cartimer_delayMicroseconds(150);
    
    // finally, set to 4-bit interface
    write4bits(0x02 << 4); 

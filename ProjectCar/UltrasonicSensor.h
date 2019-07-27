@@ -30,8 +30,6 @@
 typedef void (*ultraSensor_echo_callback_fxn_t)(unsigned int const _distance);
 
 result_t ultraSensor_init(ultraSensor_echo_callback_fxn_t _cb);
-// may set an alarm - but need to inform the main loop 
-// designed like this for optimization purposes
-result_t ultraSensor_Task10ms(boolean * const _alarm_enabled);
+result_t ultraSensor_Task10ms();
 
 #endif // ULTRASONICSENSOR_H

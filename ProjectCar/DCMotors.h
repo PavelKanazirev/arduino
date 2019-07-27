@@ -26,8 +26,6 @@ result_t dcmotors_setRightDCMotorSpeed(unsigned int _speed);
 
 result_t dcmotors_setDirectionForward(bool const _direction);
 
-result_t dcmotors_setTimerToPwmMode();
-
 result_t dcmotors_Task10ms();
 
 #endif // DCMOTORS_H

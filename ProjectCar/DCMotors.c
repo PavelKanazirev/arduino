@@ -68,25 +68,6 @@ result_t dcmotors_init()
   return EOK;
 }
 
-result_t dcmotors_setTimerToPwmMode()
-{
-// // PWM frequency and duty cycle set
-  //  The COM2A1 and COM2A0 control the PWM of the digital pin 11. 
-  // connect pwm to pins on timer 
-  BIT_CLEAR(TCCR2A, COM2A0); // clear OC2A on compare match
-  BIT_CLEAR(TCCR2A, COM2A1); // clear the bit that will be used for enabling
-  //  The COM2B1 and COM2B0 control the PWM of the digital pin 3.
-  BIT_CLEAR(TCCR2A, COM2B0); // clear OC2B on compare match
-  BIT_CLEAR(TCCR2A, COM2B1); // clear the bit that will be used for enabling
-
-// The type of timer/counter 2 is mode 1, the Phase Correct PWM
-  BIT_SET(TCCR2A, WGM20); // WGM22 - WGM20 b001 - PWM, Phase Correct chosen
-  BIT_CLEAR(TCCR2A, WGM21); // WGM22 - WGM20 b001 - PWM, Phase Correct chosen
-  BIT_CLEAR(TCCR2B, WGM22); // WGM22 - WGM20 b001 - PWM, Phase Correct chosen
-
-  return EOK;
-}
-
 result_t dcmotors_setLeftDCMotorSpeed(unsigned int _speed)
 {
   if (DC_MOTORS_MIN_SPEED >= _speed)
@@ -104,8 +85,7 @@ result_t dcmotors_setLeftDCMotorSpeed(unsigned int _speed)
 
   // set the duty cycle value for pin 3 - left PWM
   if (0 < current_left_wheel_speed)
-  { 
-//    dcmotors_setTimerToPwmMode();
+  {
     BIT_SET(TCCR2A, COM2B1);
     OCR2B = current_left_wheel_speed; // set pwm duty for pin 3
   }
@@ -113,7 +93,6 @@ result_t dcmotors_setLeftDCMotorSpeed(unsigned int _speed)
   {
     BIT_SET(TCCR2A, COM2B1);
     OCR2B = current_left_wheel_speed; // set pwm duty for pin 3
-//    cartimer_setTimerToSchedule();
   }
 
   return EOK;  
@@ -137,7 +116,6 @@ result_t dcmotors_setRightDCMotorSpeed(unsigned int _speed)
   // set the duty cycle value for pin 11 - right PWM
   if (0 < current_right_wheel_speed)
   {
-//    dcmotors_setTimerToPwmMode();
     BIT_SET(TCCR2A, COM2A1);
     OCR2A = current_right_wheel_speed; // set pwm duty
   }
@@ -145,7 +123,6 @@ result_t dcmotors_setRightDCMotorSpeed(unsigned int _speed)
   {
     BIT_SET(TCCR2A, COM2A1);
     OCR2A = current_right_wheel_speed; // set pwm duty
-//    cartimer_setTimerToSchedule();
   }
   
   return EOK;  

@@ -70,92 +70,82 @@ result_t ultraSensor_init(ultraSensor_echo_callback_fxn_t _cb)
  * may set an alarm - but need to inform the main loop 
  * designed like this for optimization purposes - when alarm is not set - timer task will not need to be running
  */
-result_t ultraSensor_Task10ms(boolean * const _pAlarm_enabled)
+result_t ultraSensor_Task10ms()
 {
   result_t result = EOK;
   static unsigned int pause_btw_triggers = ULTRASONICSENSOR_COUNTER_STOPPED;
   unsigned int current_distance_measured = 0;
 
-  if ( NULL != _pAlarm_enabled )
+  if ( ULTRASONICSENSOR_COUNTER_STOPPED != pause_btw_triggers )
   {
-      if ( ULTRASONICSENSOR_COUNTER_STOPPED != pause_btw_triggers )
+    if ( ULTRASONICSENSOR_COUNTER_READY == pause_btw_triggers-- )
+    {
+        pause_btw_triggers = ULTRASONICSENSOR_COUNTER_STOPPED;
+    }
+  }
+  
+  if ( ( EUNAVAILABLE == current_state ) || ( ESTATE_ECHO_IDLE == current_state ) )
+  {
+      if ( ULTRASONICSENSOR_COUNTER_STOPPED == pause_btw_triggers )
       {
-        if ( ULTRASONICSENSOR_COUNTER_READY == pause_btw_triggers-- )
-        {
-            pause_btw_triggers = ULTRASONICSENSOR_COUNTER_STOPPED;
-    //        *_pAlarm_enabled = false;
-        }
+        pause_btw_triggers = ULTRASONICSENSOR_COUNTER_START;
+        current_state = ESTATE_TRIGGER_SENDING;
       }
       
-      if ( ( EUNAVAILABLE == current_state ) || ( ESTATE_ECHO_IDLE == current_state ) )
+      result = EOK;
+  }
+  else // current_state not IDLE or UNAVL
+  { // All these states are described after the alarm has been activated for the callbacks
+      if ( ESTATE_TRIGGER_SENDING == current_state )
       {
-          if ( ULTRASONICSENSOR_COUNTER_STOPPED == pause_btw_triggers )
-          {
-            pause_btw_triggers = ULTRASONICSENSOR_COUNTER_START;
-            current_state = ESTATE_TRIGGER_SENDING;
-            *_pAlarm_enabled = true;  // alarm is activated so that in the next call ( the receiving ) - callbacks to be working
-          }
-          
+          ultraSensor_sendTrigger();
+  
+          current_state = ESTATE_TRIGGER_SENT;
           result = EOK;
       }
-      else // current_state not IDLE or UNAVL
-      { // All these states are described after the alarm has been activated for the callbacks
-          if ( ESTATE_TRIGGER_SENDING == current_state )
-          {
-              ultraSensor_sendTrigger();
-      
-              current_state = ESTATE_TRIGGER_SENT;
-              result = EOK;
-          }
-    
-          if ( ESTATE_TRIGGER_SENT == current_state )
-          {
-              ultraSensor_stopSendingTrigger();
-        
-              current_state = ESTATE_ECHO_RECEIVING;
-              result = EOK;
-          }
-    
-          if ( ESTATE_ECHO_RECEIVING == current_state )
-          {
-              result_t echoReadresult = ENOK;
-              echoReadresult = ultraSensor_receiveEcho(&current_distance_measured);
-              if ( EOK == echoReadresult )
-              {
-                  result = EOK;
-                  current_state = ESTATE_ECHO_RECEIVED;
-              }
-              else if ( EOVERFLOW == echoReadresult )
-              {   // wait for the timer value to not be in the overflow range
-                  result = EOVERFLOW;
-              }
-              else if ( EINPROGRESS == echoReadresult )
-              {   // ping is in progress - ISR for the timerinterupt will serve us to finish it
-                  result = EOK;
-              }
-              else if ( ENULLPOINTER == echoReadresult )
-              {   // another ping is in progress
-                  result = ENULLPOINTER;
-              }
-          }
-    
-          if ( ESTATE_ECHO_RECEIVED == current_state )
-          {
-              if ( is_distance_change_real(current_distance_measured) )
-              {
-                echo_callback(current_distance_measured);
-              }
-        
-              current_state = ESTATE_ECHO_IDLE;
-              result = EOK;
-          }
-      } // current_state not IDLE or UNAVL
-  }
-  else
-  {
-    result = ENULLPOINTER;
-  }
 
+      if ( ESTATE_TRIGGER_SENT == current_state )
+      {
+          ultraSensor_stopSendingTrigger();
+    
+          current_state = ESTATE_ECHO_RECEIVING;
+          result = EOK;
+      }
+
+      if ( ESTATE_ECHO_RECEIVING == current_state )
+      {
+          result_t echoReadresult = ENOK;
+          echoReadresult = ultraSensor_receiveEcho(&current_distance_measured);
+          if ( EOK == echoReadresult )
+          {
+              result = EOK;
+              current_state = ESTATE_ECHO_RECEIVED;
+          }
+          else if ( EOVERFLOW == echoReadresult )
+          {   // wait for the timer value to not be in the overflow range
+              result = EOVERFLOW;
+          }
+          else if ( EINPROGRESS == echoReadresult )
+          {   // ping is in progress - ISR for the timerinterupt will serve us to finish it
+              result = EOK;
+          }
+          else if ( ENULLPOINTER == echoReadresult )
+          {   // another ping is in progress
+              result = ENULLPOINTER;
+          }
+      }
+
+      if ( ESTATE_ECHO_RECEIVED == current_state )
+      {
+          if ( is_distance_change_real(current_distance_measured) )
+          {
+            echo_callback(current_distance_measured);
+          }
+    
+          current_state = ESTATE_ECHO_IDLE;
+          result = EOK;
+      }
+  } // current_state not IDLE or UNAVL
  
   return result;
 }

@@ -12,12 +12,12 @@
 extern "C" {
   #include "Initialize.h"
   #include "CarTimer.h"
+  #include "twi_lcd_driver.h"
   #include "UltrasonicSensor.h"
   #include "Joystick.h"
   #include "Buzzer.h"
   #include "RGBLed.h"
   #include "DCMotors.h"
-  #include "twi_lcd_driver.h"
 }
 
 // global types
@@ -69,7 +69,6 @@ static result_t projectCar_ADAS_Task10ms(risk_level_t * const _pRisk);
 // global variables
 static pTimer_callback_fxn_t cb = CallbackTimerCmpr;
 static bool state_idle = false;
-static bool alarm_set = false;
 static bool btn_pressed = false;
 
 static unsigned int current_distance = 0;
@@ -84,7 +83,6 @@ void setup() {
   joystic_init_t joystick_callback_list;
 
   initialize_IOpins();
-  initLCD();  
 
   joystick_callback_list.left_cmd_evt = &JoysticLeftCommandDetected;
   joystick_callback_list.right_cmd_evt = &JoysticRightCommandDetected;
@@ -92,6 +90,7 @@ void setup() {
   joystick_callback_list.up_cmd_evt = &JoysticUpCommandDetected;
   joystick_callback_list.btn_cmd_evt = &JoysticButtonChangeDetected;
   cartimer_init(cb);
+  initLCD();  
   ultraSensor_init(UltraSensorDistanceChange);
   joystick_init(joystick_callback_list);
   buzzer_init();
@@ -116,22 +115,20 @@ void Task2ms()
     if ( detect10milliseconds++ > ( CAR_TIMER_TIME_SLICE_IN_10MS * CAR_TIMER_MS_IN_A_SECOND ) )
     { // aprox. 10 seconds ( 10sec 240 milliseconds
         detect10milliseconds = 0;
-        cartimer_getMillisecondsSinceStart(&milliseconds);
-        cartimer_getTickCounter(&ticks, &cycles);
     }
   
     if ( 0 == ( detect10milliseconds % CAR_TIMER_TIME_SLICE_IN_10MS ) )
     {
         joystick_Task10ms();
         dcmotors_Task10ms();
-        if ( EOK != ultraSensor_Task10ms(&alarm_set) )
+        if ( EOK != ultraSensor_Task10ms() )
         {
-            TRACE_ERROR(alarm_set);
+            TRACE_ERROR("ultraSensor");
         }
         
         if ( EOK != projectCar_ADAS_Task10ms(&current_risk) )
         {
-            TRACE_ERROR(current_risk);
+            TRACE_ERROR("projectCar_ADAS");
         }
         
         if ( ERISK_NO == current_risk )
@@ -192,11 +189,6 @@ void loop() {
   {
       Task2ms();
       state_idle = true;
-  }
-  
-  if (alarm_set)
-  {
-      cartimer_idle();
   }
 }
 
